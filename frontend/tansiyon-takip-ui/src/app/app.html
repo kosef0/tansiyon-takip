@@ -1,0 +1,293 @@
+<div class="container">
+  <header>
+    <h1>🩺 Tansiyon Takip</h1>
+    <p class="sub">Kan basıncı ölçümlerinizi takip edin ve sağlığınızı kontrol altında tutun.</p>
+  </header>
+
+  <!-- Mesaj Alert -->
+  @if (mesaj()) {
+  <div class="alert" [class.ok]="mesaj()?.tip === 'ok'" [class.err]="mesaj()?.tip === 'err'">
+    {{ mesaj()?.text }}
+  </div>
+  }
+
+  <section class="ozet-section">
+    <h2>📊 Tansiyon Özeti</h2>
+
+    <div class="ozet-cards">
+
+      <!-- Günlük Özet -->
+      <div class="ozet-card">
+        <div class="ozet-header gunluk">
+          <span class="ozet-icon">📅</span>
+          <span class="ozet-title">Bugün</span>
+        </div>
+        @if (gunlukOzet()) {
+        <div class="ozet-body">
+          <div class="ozet-ortalama">
+            <span class="ort-label">Ortalama</span>
+            <span class="ort-value">{{ formatOrt(gunlukOzet()?.genelBuyukOrt) }} / {{
+              formatOrt(gunlukOzet()?.genelKucukOrt) }}</span>
+          </div>
+          <div class="ozet-detay">
+            <div class="detay-row">
+              <span>🌅 Sabah:</span>
+              <span>{{ formatOrt(gunlukOzet()?.sabahBuyukOrt) }} / {{ formatOrt(gunlukOzet()?.sabahKucukOrt) }}</span>
+            </div>
+            <div class="detay-row">
+              <span>🌙 Akşam:</span>
+              <span>{{ formatOrt(gunlukOzet()?.aksamBuyukOrt) }} / {{ formatOrt(gunlukOzet()?.aksamKucukOrt) }}</span>
+            </div>
+          </div>
+          <div class="ozet-durum" [class]="durumRengi(gunlukOzet()?.durum)">
+            <span class="durum-emoji">{{ durumEmoji(gunlukOzet()?.durum) }}</span>
+            <span class="durum-text">{{ durumBaslik(gunlukOzet()?.durum) }}</span>
+          </div>
+          @if (gunlukOzet()?.mesaj) {
+          <p class="ozet-mesaj">{{ gunlukOzet()?.mesaj }}</p>
+          }
+          <p class="ozet-count">{{ gunlukOzet()?.toplamOlcumSayisi }} ölçüm</p>
+        </div>
+        } @else {
+        <div class="ozet-body empty">
+          <p>Bugün henüz ölçüm yok</p>
+        </div>
+        }
+      </div>
+
+      <!-- Haftalık Özet -->
+      <div class="ozet-card">
+        <div class="ozet-header haftalik">
+          <span class="ozet-icon">📆</span>
+          <span class="ozet-title">Son 7 Gün</span>
+        </div>
+        @if (haftalikOzet() && haftalikOzet()?.toplamOlcumSayisi! > 0) {
+        <div class="ozet-body">
+          <div class="ozet-ortalama">
+            <span class="ort-label">Ortalama</span>
+            <span class="ort-value">{{ formatOrt(haftalikOzet()?.genelBuyukOrt) }} / {{
+              formatOrt(haftalikOzet()?.genelKucukOrt) }}</span>
+          </div>
+          <div class="ozet-detay">
+            <div class="detay-row">
+              <span>🌅 Sabah:</span>
+              <span>{{ formatOrt(haftalikOzet()?.sabahBuyukOrt) }} / {{ formatOrt(haftalikOzet()?.sabahKucukOrt)
+                }}</span>
+            </div>
+            <div class="detay-row">
+              <span>🌙 Akşam:</span>
+              <span>{{ formatOrt(haftalikOzet()?.aksamBuyukOrt) }} / {{ formatOrt(haftalikOzet()?.aksamKucukOrt)
+                }}</span>
+            </div>
+          </div>
+          <div class="ozet-durum" [class]="durumRengi(haftalikOzet()?.durum)">
+            <span class="durum-emoji">{{ durumEmoji(haftalikOzet()?.durum) }}</span>
+            <span class="durum-text">{{ durumBaslik(haftalikOzet()?.durum) }}</span>
+          </div>
+          @if (haftalikOzet()?.mesaj) {
+          <p class="ozet-mesaj">{{ haftalikOzet()?.mesaj }}</p>
+          }
+          <p class="ozet-count">{{ haftalikOzet()?.toplamOlcumSayisi }} ölçüm</p>
+        </div>
+        } @else {
+        <div class="ozet-body empty">
+          <p>Son 7 günde ölçüm yok</p>
+        </div>
+        }
+      </div>
+
+      <!-- 15 Günlük Özet -->
+      <div class="ozet-card">
+        <div class="ozet-header onbes-gunluk">
+          <span class="ozet-icon">🗓️</span>
+          <span class="ozet-title">Son 15 Gün</span>
+        </div>
+        @if (onbesGunlukOzet() && onbesGunlukOzet()?.toplamOlcumSayisi! > 0) {
+        <div class="ozet-body">
+          <div class="ozet-ortalama">
+            <span class="ort-label">Ortalama</span>
+            <span class="ort-value">{{ formatOrt(onbesGunlukOzet()?.genelBuyukOrt) }} / {{
+              formatOrt(onbesGunlukOzet()?.genelKucukOrt) }}</span>
+          </div>
+          <div class="ozet-detay">
+            <div class="detay-row">
+              <span>🌅 Sabah:</span>
+              <span>{{ formatOrt(onbesGunlukOzet()?.sabahBuyukOrt) }} / {{ formatOrt(onbesGunlukOzet()?.sabahKucukOrt)
+                }}</span>
+            </div>
+            <div class="detay-row">
+              <span>🌙 Akşam:</span>
+              <span>{{ formatOrt(onbesGunlukOzet()?.aksamBuyukOrt) }} / {{ formatOrt(onbesGunlukOzet()?.aksamKucukOrt)
+                }}</span>
+            </div>
+          </div>
+          <div class="ozet-durum" [class]="durumRengi(onbesGunlukOzet()?.durum)">
+            <span class="durum-emoji">{{ durumEmoji(onbesGunlukOzet()?.durum) }}</span>
+            <span class="durum-text">{{ durumBaslik(onbesGunlukOzet()?.durum) }}</span>
+          </div>
+          @if (onbesGunlukOzet()?.mesaj) {
+          <p class="ozet-mesaj">{{ onbesGunlukOzet()?.mesaj }}</p>
+          }
+          <p class="ozet-count">{{ onbesGunlukOzet()?.toplamOlcumSayisi }} ölçüm</p>
+        </div>
+        } @else {
+        <div class="ozet-body empty">
+          <p>Son 15 günde ölçüm yok</p>
+        </div>
+        }
+      </div>
+
+    </div>
+  </section>
+
+  
+  <section class="card" [class.editing]="duzenlemeModu()">
+    <h2>
+      @if (duzenlemeModu()) {
+      ✏️ Ölçüm Düzenle
+      } @else {
+      ➕ Yeni Ölçüm Ekle
+      }
+    </h2>
+
+    @if (duzenlemeModu()) {
+    <div class="edit-notice">
+      <span>📝 Düzenleme modu aktif - ID: {{ duzenlenenId() }}</span>
+    </div>
+    }
+
+    <div class="grid">
+      <label>
+        Tarih
+        <input type="date" [value]="formTarih()" (input)="formTarih.set($any($event.target).value)" />
+      </label>
+
+      <label>
+        Zaman Dilimi
+        <select [value]="formZaman()" (change)="formZaman.set($any($event.target).value)">
+          <option value="SABAH">🌅 Sabah</option>
+          <option value="AKSAM">🌙 Akşam</option>
+        </select>
+      </label>
+
+      <label>
+        Büyük Tansiyon (Sistolik)
+        <input type="number" placeholder="120" min="50" max="250" [value]="formBuyuk()"
+          (input)="formBuyuk.set(+$any($event.target).value || null)" />
+      </label>
+
+      <label>
+        Küçük Tansiyon (Diyastolik)
+        <input type="number" placeholder="80" min="30" max="150" [value]="formKucuk()"
+          (input)="formKucuk.set(+$any($event.target).value || null)" />
+      </label>
+    </div>
+
+    <div class="row">
+      <button (click)="olcumEkle()" [disabled]="loading()" [class.btn-update]="duzenlemeModu()">
+        @if (loading()) {
+        ⏳ Kaydediliyor...
+        } @else if (duzenlemeModu()) {
+        ✅ Güncelle
+        } @else {
+        💾 Kaydet
+        }
+      </button>
+      @if (duzenlemeModu()) {
+      <button class="btn-cancel" (click)="duzenlemeyiIptalEt()">❌ İptal</button>
+      } @else {
+      <button class="secondary" (click)="formTemizle()">🗑️ Temizle</button>
+      }
+    </div>
+  </section>
+
+  <!-- Ölçüm Geçmişi -->
+  <section class="card">
+    <div class="section-header">
+      <h2>📋 Ölçüm Geçmişi</h2>
+      <span class="record-count">{{ olcumler().length }} kayıt</span>
+    </div>
+
+    @if (olcumler().length > 0) {
+    <div class="table-wrapper table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Tarih</th>
+            <th>Zaman</th>
+            <th>Büyük</th>
+            <th>Küçük</th>
+            <th>Durum</th>
+            <th>İşlemler</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (olcum of olcumler(); track olcum.id) {
+          <tr [class.editing-row]="duzenlenenId() === olcum.id">
+            <td>{{ formatTarih(olcum.tarih) }}</td>
+            <td>
+              @if (olcum.zamanDilimi === 'SABAH') {
+              🌅 Sabah
+              } @else {
+              🌙 Akşam
+              }
+            </td>
+            <td class="value">{{ olcum.buyuk }}</td>
+            <td class="value">{{ olcum.kucuk }}</td>
+            <td>
+              @if (olcum.buyuk >= 140 || olcum.kucuk >= 90) {
+              <span class="badge badge-yuksek">Yüksek</span>
+              } @else if (olcum.buyuk < 90 || olcum.kucuk < 60) { <span class="badge badge-dusuk">Düşük</span>
+                } @else {
+                <span class="badge badge-normal">Normal</span>
+                }
+            </td>
+            <td class="actions">
+              <button class="btn-icon btn-edit" (click)="duzenle(olcum)" title="Düzenle">
+                ✏️
+              </button>
+              <button class="btn-icon btn-delete" (click)="sil(olcum)" title="Sil">
+                🗑️
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    } @else {
+    <p class="empty-text">Henüz ölçüm kaydı bulunmuyor. Yukarıdaki formu kullanarak yeni ölçüm ekleyebilirsiniz.</p>
+    }
+  </section>
+
+  <section class="card info-card">
+    <h2>💡 Tansiyon Değerleri Rehberi</h2>
+    <div class="info-grid">
+      <div class="info-item normal">
+        <span class="info-emoji">✅</span>
+        <div>
+          <strong>Normal</strong>
+          <p>Sistolik: 90-139 mmHg<br>Diyastolik: 60-89 mmHg</p>
+        </div>
+      </div>
+      <div class="info-item yuksek">
+        <span class="info-emoji">🔴</span>
+        <div>
+          <strong>Hipertansiyon Riski</strong>
+          <p>Sistolik: ≥140 mmHg<br>Diyastolik: ≥90 mmHg</p>
+        </div>
+      </div>
+      <div class="info-item dusuk">
+        <span class="info-emoji">🟡</span>
+        <div>
+          <strong>Hipotansiyon Riski</strong>
+          <p>Sistolik: &lt;90 mmHg<br>Diyastolik: &lt;60 mmHg</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Bu uygulama tıbbi tavsiye niteliği taşımaz. Lütfen doktorunuza danışın.</p>
+  </footer>
+</div>
