@@ -34,3 +34,11 @@ npm start
 - 📊 Günlük, haftalık, 15 günlük özet
 - 🔴 Hipertansiyon / Hipotansiyon uyarısı
 - 🌙 Sabah / Akşam ölçüm ayrımı
+
+## Değerlendirme
+
+| Durum | Sistolik | Diyastolik | Uyarı |
+|-------|----------|------------|-------|
+| ✅ Normal | 90-139 | 60-89 | Sağlıklı |
+| 🔴 Yüksek | ≥140 | ≥90 | Hipertansiyon riski |
+| 🟡 Düşük | <90 | <60 | Hipotansiyon riski |
